@@ -1,4 +1,4 @@
-
+namespace robotPu {
 class Parameters {
     walkTilt: number;
     jumpTilt: number;
@@ -1617,4 +1617,5 @@ class RobotPu {
             this.visualGreeting();
         }
     }
+}
 }
