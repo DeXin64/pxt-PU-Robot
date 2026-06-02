@@ -519,7 +519,7 @@ class WK {
  * Optimized with internal WK and Parameters instances.
  */
 
-class RobotPu {
+export class RobotPu {
     // Component Instances
     public pr: Parameters;
     public wk: WK;
