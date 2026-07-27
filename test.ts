@@ -4,14 +4,14 @@
  * Pass criteria:
  * 1. The project compiles in MakeCode without TypeScript or blocks errors.
  * 2. In the simulator, it runs without unhandled runtime exceptions.
- * 3. On a micro:bit V2 with the PU Robot connected:
+ * 3. On a micro:bit V1 or V2 with the PU Robot connected:
  *    - Button A moves the foot servos.
  *    - Button B runs the greet action and then stops it.
  *    - Button A+B sends radio values and a short text message.
  *
  * Notes:
  * - Sensor values may be 0 or placeholder values if robot hardware is absent.
- * - This extension targets micro:bit V2.
+ * - This extension supports micro:bit V1 and V2.
  */
 
 robotPu.setServoTrim(0, 0, 0, 0, 0, 0)

@@ -8,15 +8,11 @@ The PU Robot kit is available from the [ELECFREAKS store](https://shop.elecfreak
 
 ## micro:bit compatibility
 
-This extension is intended for **micro:bit V2**.
+This extension supports **micro:bit V1 and micro:bit V2**.
 
-Reasons:
+The robot blocks avoid version-specific hardware APIs, so projects can compile for both micro:bit hardware versions. Sound-responsive behavior that depended on the micro:bit V2 microphone has been removed and replaced with fixed movement rhythms.
 
-* The robot runtime uses `input.soundLevel()`, which depends on V2 hardware.
-* The extension is large enough that simple V1 projects may hit the MakeCode `code too big` limit.
-* The package metadata disables the micro:bit V1 (`mbdal`) build variant so MakeCode treats this as a V2-only extension.
-
-For approval and classroom use, please present this package as **V2 only** in the repository description, icon, README, and product documentation.
+For approval and classroom use, please present this package as compatible with **micro:bit V1 and micro:bit V2** in the repository description, icon, README, and product documentation.
 
 ## What teachers can do with this extension
 

@@ -898,9 +898,8 @@ export class RobotPu {
         if (Math.abs(this.bodyPitch2) > 12) {
             this.setCt([5], [-this.bodyPitch2]);
         }
-        let sl = input.soundLevel();
-        this.pr.stateTargets[this.restState][5] = 90 - sl * 0.3;
-        return this.wk.move(this.pr, [this.restState], [0, 1, 2, 3, 4, 5], 1 + sl * 0.001, [], 0.5);
+        this.pr.stateTargets[this.restState][5] = 90;
+        return this.wk.move(this.pr, [this.restState], [0, 1, 2, 3, 4, 5], 1, [], 0.5);
     }
 
     /**
@@ -1183,10 +1182,8 @@ export class RobotPu {
 
         // 2. Check for "Wake Up" triggers:
         // - High acceleration (maxG > gThreshold)
-        // - Loud sound detected
         // - Sudden tilt change > 20 degrees
         if (this.maxG > this.gThreshold ||
-            input.soundLevel() > 128 || // Check if sound level is "loud" (0-255)
             roll_delta > 20 ||
             pitch_delta > 20) {
 
@@ -1218,7 +1215,7 @@ export class RobotPu {
         this.np.clear();
         this.np.show();
 
-        // 4. Monitor for wake-up triggers (e.g., sound or touch)
+        // 4. Monitor for wake-up triggers such as motion or tilt changes
         if (this.checkWakeup() == 1) {
             // Return to Idle/Standby state
             this.gst = 0;
@@ -1466,16 +1463,13 @@ export class RobotPu {
         this.np.show();
     }
     /**
- * Makes the robot dance with self-balance based on sound analysis.
+ * Makes the robot dance with self-balance using a fixed rhythm.
  */
     public dance(): number {
         let ts = control.millis();
-        let ms = input.soundLevel();
+        let fixedBeat = ts - this.lastLowBeat > this.music.period * Math.randomRange(8, 16);
 
-        // 1. Check for a musical beat using the MusicLib helper
-        let il = this.music.isABeat(ts, ms, 1.1);
-
-        // 2. High-beat logic: Pulse LEDs and flip wiggle direction
+        // 1. Pulse LEDs and flip wiggle direction on a fixed rhythm
         if (ts - this.lastHIghBeat > this.music.period * 0.5) {
             this.danceYawWiggle *= -1;
             this.dancePitchWiggle *= -1;
@@ -1483,14 +1477,14 @@ export class RobotPu {
             this.lastHIghBeat = ts;
         }
 
-        // 3. Low-beat logic: Change the dance move routine
-        if (il && (ts - this.lastLowBeat > this.music.period * Math.randomRange(8, 16))) {
+        // 2. Change the dance move routine on a slower fixed rhythm
+        if (fixedBeat) {
             // Pick a new move from the approved dance state list
             this.danceState = [this.pr.danceOkStates[Math.randomRange(0, this.pr.danceOkStates.length - 1)]];
             this.lastLowBeat = ts;
         }
 
-        // 4. Balance and tilt compensation
+        // 3. Balance and tilt compensation
         this.balanceParam();
         let ft = Math.min(12.0, Math.max(-12.0, this.rl * 0.8 + this.danceYawWiggle * 0.2));
         if (Math.abs(ft) < 8) {
@@ -1498,18 +1492,17 @@ export class RobotPu {
         }
         let lt = ft + this.danceYawWiggle;
 
-        // 5. Apply control vectors to servos
-        // Servo 5 (head/body pitch) reacts to sound volume
+        // 4. Apply control vectors to servos
         this.setCt([0, 1, 2, 3, 4, 5],
-            [ft, lt, ft, lt, this.rl, this.dancePitchWiggle - ms * 0.001]);
+            [ft, lt, ft, lt, this.rl, this.dancePitchWiggle]);
 
-        // 6. Dynamic speed adjustment
+        // 5. Dynamic speed adjustment
         this.danceSpeed = Math.min(2.5, this.danceSpeed * 1.015);
         if (this.maxG > 1800) { // If shaking too hard, slow down
             this.danceSpeed *= 0.9;
         }
 
-        // 7. Execute the movement via the WK instance
+        // 6. Execute the movement via the WK instance
         return this.wk.move(this.pr, this.danceState, [0, 1, 2, 3], this.danceSpeed, [4, 5], this.danceSpeed);
     }
 
