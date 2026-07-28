@@ -8,11 +8,9 @@ The PU Robot kit is available from the [ELECFREAKS store](https://shop.elecfreak
 
 ## micro:bit compatibility
 
-This extension supports **micro:bit V1 and micro:bit V2**.
+> Using these blocks requires the micro:bit V2 hardware. micro:bit V1 will display the 927 error code.
 
-The robot blocks avoid version-specific hardware APIs, so projects can compile for both micro:bit hardware versions. Sound-responsive behavior that depended on the micro:bit V2 microphone has been removed and replaced with fixed movement rhythms.
-
-For approval and classroom use, please present this package as compatible with **micro:bit V1 and micro:bit V2** in the repository description, icon, README, and product documentation.
+This extension is **micro:bit (V2) only**.
 
 ## What teachers can do with this extension
 
